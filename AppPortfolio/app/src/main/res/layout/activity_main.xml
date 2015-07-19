@@ -1,0 +1,84 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerHorizontal="true"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="350dp"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:gravity="top|center"
+            android:text="My Nanodegree Apps!"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold" />
+
+        <Button
+            style="@style/ButtonsTheme"
+            android:background="@drawable/button"
+            android:id="@+id/button_spotify"
+            android:layout_below="@+id/title"
+            android:layout_marginTop="20dp"
+            android:onClick="sendMessage"
+            android:text="Spotify Streamer" />
+
+        <Button
+            style="@style/ButtonsTheme"
+            android:background="@drawable/button"
+            android:id="@+id/button_scores"
+            android:layout_below="@+id/button_spotify"
+            android:layout_marginTop="15dp"
+            android:onClick="sendMessage"
+            android:text="Scores App" />
+
+        <Button
+            style="@style/ButtonsTheme"
+            android:background="@drawable/button"
+            android:id="@+id/button_library"
+            android:layout_below="@+id/button_scores"
+            android:layout_marginTop="15dp"
+            android:onClick="sendMessage"
+            android:text="Library App" />
+
+        <Button
+            style="@style/ButtonsTheme"
+            android:background="@drawable/button"
+            android:id="@+id/button_bigger"
+            android:layout_below="@+id/button_library"
+            android:layout_marginTop="15dp"
+            android:onClick="sendMessage"
+            android:text="Build It Bigger" />
+
+        <Button
+            style="@style/ButtonsTheme"
+            android:background="@drawable/button"
+            android:id="@+id/button_reader"
+            android:layout_below="@+id/button_bigger"
+            android:layout_marginTop="15dp"
+            android:onClick="sendMessage"
+            android:text="XYZ Reader" />
+
+        <Button
+            style="@style/ButtonsTheme"
+            android:background="@drawable/button"
+            android:id="@+id/button_capstone"
+            android:layout_below="@+id/button_reader"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="@android:color/holo_green_dark"
+            android:onClick="sendMessage"
+            android:text="Capstone: My App" />
+    </RelativeLayout>
+</LinearLayout>
