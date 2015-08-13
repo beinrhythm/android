@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="my_menu_spinner_list">
+        <item>Popular</item>
+        <item>Top rated</item>
+        <item>Now playing</item>
+        <item>Settings</item>
+    </string-array>
+
+    <string-array name="pref_sort_options">
+        <item>@string/pref_sort_label_desc</item>
+        <item>@string/pref_sort_label_asc</item>
+    </string-array>
+
+    <string-array name="pref_sort_values">
+        <item>@string/sort_desc</item>
+        <item>@string/sort_asc</item>
+    </string-array>
+</resources>

@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Movies App</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="pref_sort_popularity">popularity</string>
+    <string name="pref_sort_toprated">vote_average</string>
+    <string name="pref_sort_nowplaying">now_playing</string>
+    <string name="title_movie_details">Movie Details</string>
+
+    <!-- Default api key for movie db preference [CHAR LIMIT=NONE] -->
+    <string name="pref_apikey">70e6725733cab7f077be08547a38cb6e</string>
+
+    <!-- Label for the sort order  preference [CHAR LIMIT=30] -->
+    <string name="pref_sort_label">Sort Order</string>
+
+    <!-- Label for ascending sort option in sort order preference [CHAR LIMIT=25] -->
+    <string name="pref_sort_label_asc">Ascending</string>
+
+    <!-- Label for descending sort option in sort order preference [CHAR LIMIT=25] -->
+    <string name="pref_sort_label_desc">Descending</string>
+
+    <!-- Key name for sort order preference in SharedPreferences [CHAR LIMIT=NONE] -->
+    <string name="pref_sort_key">sortOrder</string>
+
+    <!-- Value in SharedPreferences for ascending sort order option [CHAR LIMIT=NONE] -->
+    <string name="sort_asc" translatable="false">asc</string>
+
+    <!-- Value in SharedPreferences for descending sort order option [CHAR LIMIT=NONE] -->
+    <string name="sort_desc" translatable="false">desc</string>
+
+</resources>

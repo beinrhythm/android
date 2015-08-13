@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity$MoviesFragment">
+    <item
+        android:id="@+id/spinner"
+        android:layout_width="30sp"
+        android:layout_height="35sp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/settings_icon"
+        android:focusable="false"
+        android:title="@string/pref_sort_key"
+        app:actionViewClass="android.widget.Spinner"
+        app:showAsAction="ifRoom" />
+</menu>
