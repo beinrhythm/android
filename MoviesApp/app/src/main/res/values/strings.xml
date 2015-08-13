@@ -8,8 +8,8 @@
     <string name="pref_sort_nowplaying">now_playing</string>
     <string name="title_movie_details">Movie Details</string>
 
-    <!-- Default api key for movie db preference [CHAR LIMIT=NONE] -->
-    <string name="pref_apikey">70e6725733cab7f077be08547a38cb6e</string>
+    <!-- Insert api key for movie db preference [CHAR LIMIT=NONE] -->
+    <string name="pref_apikey">insert api key</string>
 
     <!-- Label for the sort order  preference [CHAR LIMIT=30] -->
     <string name="pref_sort_label">Sort Order</string>
