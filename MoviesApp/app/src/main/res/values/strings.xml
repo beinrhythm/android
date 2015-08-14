@@ -5,11 +5,11 @@
 
     <string name="pref_sort_popularity">popularity</string>
     <string name="pref_sort_toprated">vote_average</string>
-    <string name="pref_sort_nowplaying">now_playing</string>
+
     <string name="title_movie_details">Movie Details</string>
 
     <!-- Insert api key for movie db preference [CHAR LIMIT=NONE] -->
-    <string name="pref_apikey">insert api key</string>
+    <string name="pref_apikey">70e6725733cab7f077be08547a38cb6e</string>
 
     <!-- Label for the sort order  preference [CHAR LIMIT=30] -->
     <string name="pref_sort_label">Sort Order</string>
@@ -28,5 +28,9 @@
 
     <!-- Value in SharedPreferences for descending sort order option [CHAR LIMIT=NONE] -->
     <string name="sort_desc" translatable="false">desc</string>
+    <string name="overview">Overview</string>
+    <string name="popularity">Popularity</string>
+    <string name="toprated">Top Rated</string>
+    <string name="menuitem_refresh">refresh</string>
 
 </resources>

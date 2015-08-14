@@ -15,18 +15,15 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.android.abhi.moviesapp.R;
-import com.android.abhi.moviesapp.activities.DetailMovieActivity;
-import com.android.abhi.moviesapp.activities.SettingsActivity;
+import com.android.abhi.moviesapp.activities.MovieDetailActivity;
 import com.android.abhi.moviesapp.adapters.MoviesAdapter;
 import com.android.abhi.moviesapp.model.Movie;
 
@@ -48,15 +45,100 @@ import java.util.List;
  */
 public class MoviesFragment extends Fragment {
 
-
     private MoviesAdapter mMoviesAdapter;
+    private ArrayList<Movie> mMoviesList = new ArrayList<>();
+    private Menu optionsMenu;
+    private String mSortBy;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Add this line in order for this fragment to handle menu events.
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey("movies")) {
+                mMoviesList = savedInstanceState.getParcelableArrayList("movies");
+            }
+            if (savedInstanceState.containsKey("sortBy")) {
+                mSortBy = savedInstanceState.getString("sortBy");
+            }
+        } else {
+            mSortBy = getString(R.string.pref_sort_popularity);
+            updateMovies(mSortBy);
+        }
         setHasOptionsMenu(true);
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.menu_moviefragment, menu);
+        this.optionsMenu = menu;
+
+        inflater.inflate(R.menu.refresh, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        switch (item.getItemId()) {
+            case R.id.action_popularity: {
+                mSortBy = getString(R.string.pref_sort_popularity);
+                updateMovies(mSortBy);
+                return true;
+            }
+            case R.id.action_toprated: {
+                mSortBy = getString(R.string.pref_sort_toprated);
+                updateMovies(mSortBy);
+                return true;
+            }
+            case R.id.airport_menuRefresh: {
+                setRefreshActionButtonState(true);
+                updateMovies(mSortBy);
+                setRefreshActionButtonState(false);
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        // The ArrayAdapter will take data from a source and
+        // use it to populate the GridView it's attached to.
+        mMoviesAdapter =
+                new MoviesAdapter(
+                        getActivity(), // The current context (this activity)
+                        mMoviesList);
+
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+        // Get a reference to the GridView, and attach this adapter to it.
+        GridView gridView = (GridView) rootView.findViewById(R.id.gridView_movies);
+        gridView.setAdapter(mMoviesAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Movie movie = mMoviesAdapter.getItem(position);
+                Intent intent = new Intent(getActivity(), MovieDetailActivity.class)
+                        .putExtra("movie", movie);
+                startActivity(intent);
+            }
+        });
+
+        return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putParcelableArrayList("movies", mMoviesList);
+        savedInstanceState.putString("sortBy", mSortBy);
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     private boolean isNetworkConnected() {
@@ -77,105 +159,35 @@ public class MoviesFragment extends Fragment {
         toast.show();
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.menu_moviefragment, menu);
-
-        Spinner spinner = (Spinner) menu.findItem(R.id.spinner).getActionView(); // find the spinner
-        SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(
-                getActivity().getBaseContext(),
-                R.array.my_menu_spinner_list, android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(mSpinnerAdapter); // set the adapter to provide layout of rows and content
-
-        // set the listener, to perform actions based on item selection
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                String selection = parent.getItemAtPosition(pos).toString();
-                if (selection.equalsIgnoreCase("settings")) {
-                    startActivity(new Intent(getActivity(), SettingsActivity.class));
+    public void setRefreshActionButtonState(final boolean refreshing) {
+        if (optionsMenu != null) {
+            final MenuItem refreshItem = optionsMenu
+                    .findItem(R.id.airport_menuRefresh);
+            if (refreshItem != null) {
+                if (refreshing) {
+                    refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
                 } else {
-                    String sortBy = getSortBy(selection);
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                    String sortOrder = prefs.getString(getString(R.string.pref_sort_key),
-                            getString(R.string.sort_desc));
-                    String order = sortBy.concat(".").concat(sortOrder);
-                    updateMovies(order);
+                    refreshItem.setActionView(null);
                 }
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        }
     }
 
-    private String getSortBy(String selected) {
-        if (selected.equalsIgnoreCase("top rated"))
-            return getString(R.string.pref_sort_toprated);
-        if (selected.equalsIgnoreCase("now playing"))
-            return getString(R.string.pref_sort_nowplaying);
-        else
-            return getString(R.string.pref_sort_popularity);
-    }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        // The ArrayAdapter will take data from a source and
-        // use it to populate the GridView it's attached to.
-        mMoviesAdapter =
-                new MoviesAdapter(
-                        getActivity(), // The current context (this activity)
-                        new ArrayList<Movie>());
-
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-        // Get a reference to the GridView, and attach this adapter to it.
-        GridView gridView = (GridView) rootView.findViewById(R.id.gridView_movies);
-        gridView.setAdapter(mMoviesAdapter);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Movie movie = mMoviesAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), DetailMovieActivity.class)
-                        .putExtra("movie", movie);
-                startActivity(intent);
-            }
-        });
-
-        return rootView;
-    }
-
-    private void updateMovies(String sortOrder) {
+    private void updateMovies(String sortBy) {
         //check network connection here
         if (isNetworkConnected()) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+            String sortOrder = prefs.getString(getString(R.string.pref_sort_key),
+                    getString(R.string.sort_desc));
+            String order = sortBy.concat(".").concat(sortOrder);
             FetchMovieTask moviesTask = new FetchMovieTask();
-            moviesTask.execute(sortOrder);
+            moviesTask.execute(order);
         } else {
             createToastWithMessage("No internet connectivity");
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        String sortBy = getString(R.string.pref_sort_popularity);
-
-        String sortOrder = prefs.getString(getString(R.string.pref_sort_key),
-                getString(R.string.sort_desc));
-        String order = sortBy.concat(".").concat(sortOrder);
-        updateMovies(order);
-
-    }
 
     public class FetchMovieTask extends AsyncTask<String, Void, List<Movie>> {
 
@@ -279,6 +291,7 @@ public class MoviesFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Movie> movieList) {
             if (movieList != null) {
+                mMoviesList.addAll(movieList);
                 mMoviesAdapter.replace(movieList);
             }
         }
@@ -295,8 +308,7 @@ public class MoviesFragment extends Fragment {
             final String MOVIE_RATINGS = "vote_average";
 
             final String POSTER_BASE_URL = "http://image.tmdb.org/t/p/";
-            final String POSTER_SIZE = "w500";
-
+            final String POSTER_SIZE = "w185";
 
             JSONObject moviesJson = new JSONObject(movieJsonStr);
             JSONArray movieArray = moviesJson.getJSONArray(MOVIE_LIST);
@@ -322,9 +334,7 @@ public class MoviesFragment extends Fragment {
                 Movie m = new Movie(id, title, overview, releaseDate, ratings, posterPath);
                 moviesList.add(m);
             }
-
             return moviesList;
         }
-
     }
 }
