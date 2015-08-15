@@ -9,7 +9,7 @@
     <string name="title_movie_details">Movie Details</string>
 
     <!-- Insert api key for movie db preference [CHAR LIMIT=NONE] -->
-    <string name="pref_apikey">70e6725733cab7f077be08547a38cb6e</string>
+    <string name="pref_apikey">PUT API KEY HERE</string>
 
     <!-- Label for the sort order  preference [CHAR LIMIT=30] -->
     <string name="pref_sort_label">Sort Order</string>
